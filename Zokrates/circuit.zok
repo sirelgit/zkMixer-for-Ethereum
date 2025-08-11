@@ -1,0 +1,42 @@
+import "hashes/sha256/512bitPadded" as sha256;
+
+struct MerkleTreeProofStruct<DEPTH> {
+    u32[8] leaf;
+    bool[DEPTH] directionSelector;
+    u32[DEPTH][8] path;
+}
+
+def select(bool condition, u32[8] left, u32[8] right) -> (u32[8], u32[8]) {
+    return (condition ? right : left, condition ? left : right);
+}
+
+def merkleTreeProof<DEPTH>(u32[8] root, MerkleTreeProofStruct<DEPTH> proof) -> bool {
+    u32[8] mut digest = proof.leaf;
+
+    for u32 i in 0..DEPTH {
+        (u32[8], u32[8]) s = select(proof.directionSelector[i], digest, proof.path[i]);
+        digest = sha256(s.0, s.1);
+    }
+
+    return digest == root;
+}
+
+const u32 TREE_DEPTH = 3;
+
+def main(
+    u32[8] treeRoot,                                
+    u32[8] nullifierHash,                           
+    private u32[8] nullifier,                       
+    private u32[8] secret,                          
+    private MerkleTreeProofStruct<TREE_DEPTH> proof 
+) {
+
+    u32[8] commitment = sha256(nullifier, secret);
+    assert(commitment == proof.leaf);
+
+    assert(merkleTreeProof(treeRoot, proof));
+
+    u32[8] zero = [0, 0, 0, 0, 0, 0, 0, 0];
+    u32[8] expectedHash = sha256(nullifier, zero);
+    assert(expectedHash == nullifierHash);
+}
