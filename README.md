@@ -48,9 +48,9 @@ For circuit compatibility, root and nullifier are passed as `uint256[8]` where e
 ## Dependencies
 
 - Solidity ^0.8.x
-- [Truffle] (https://archive.trufflesuite.com/)
+- [Truffle](https://archive.trufflesuite.com/)
 - [OpenZeppelin](https://www.openzeppelin.com/)
-- [Zokrates] (https://zokrates.github.io/gettingstarted.html)
+- [Zokrates](https://zokrates.github.io/gettingstarted.html)
 - Node.js 18
 
 ## How to Run the Project
