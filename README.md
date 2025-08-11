@@ -74,5 +74,5 @@ For circuit compatibility, root and nullifier are passed as `uint256[8]` where e
 
 5. Run test
    ```fish
-   truffle exec scripts/test.js
+   truffle exec scripts/test.js --network ganache
    ```
